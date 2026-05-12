@@ -1,0 +1,103 @@
+plugins {
+    id 'java-library'
+    id 'net.neoforged.moddev' version '2.0.78'
+}
+
+base {
+    archivesName = project.mod_id
+    version = project.mod_version
+    group = project.mod_group
+}
+
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(21)
+}
+
+repositories {
+    mavenCentral()
+    maven { url = 'https://maven.neoforged.net/releases' }
+    maven { url = 'https://maven.seedfinding.com' }
+    maven { url = 'https://maven.latticg.com' }
+    maven { url = 'https://maven.parchmentmc.org' }
+}
+
+configurations {
+    shade
+    implementation.extendsFrom shade
+}
+
+neoForge {
+    version = project.neoforge_version
+
+    parchment {
+        mappingsVersion = project.parchment_mapping_version
+        minecraftVersion = project.parchment_mc_version
+    }
+
+    accessTransformers.from('src/main/resources/META-INF/accesstransformer.cfg')
+
+    mods {
+        "${project.mod_id}" {
+            sourceSet sourceSets.main
+        }
+    }
+
+    runs {
+        client {
+            client()
+            programArguments.addAll('--username', 'Dev')
+        }
+        data {
+            data()
+        }
+    }
+}
+
+dependencies {
+    shade "com.seedfinding:mc_feature:${project.seedfinding_feature_version}"
+    shade "com.seedfinding:mc_biome:${project.seedfinding_biome_version}"
+    shade "com.seedfinding:mc_core:${project.seedfinding_core_version}"
+    shade "com.seedfinding:mc_seed:${project.seedfinding_seed_version}"
+    shade "com.seedfinding:latticg:${project.latticg_version}:rt"
+}
+
+processResources {
+    def expandProps = [
+        'mod_id'        : project.mod_id,
+        'mod_name'      : project.mod_name,
+        'mod_version'   : project.mod_version,
+        'mod_group'     : project.mod_group,
+        'mc_version'    : project.minecraft_version,
+        'neoforge_version': project.neoforge_version
+    ]
+    inputs.properties expandProps
+    filesMatching(['META-INF/neoforge.mods.toml', 'pack.mcmeta']) {
+        expand expandProps
+    }
+}
+
+jar {
+    from(configurations.shade.collect { it.isDirectory() ? it : zipTree(it) }) {
+        include 'com/seedfinding/**'
+        exclude 'META-INF/MANIFEST.MF'
+        exclude 'META-INF/*.SF'
+        exclude 'META-INF/*.DSA'
+        exclude 'META-INF/*.RSA'
+    }
+
+    manifest {
+        attributes([
+            'Specification-Title'   : project.mod_name,
+            'Specification-Vendor'  : 'earthcomputer',
+            'Specification-Version' : project.mod_version,
+            'Implementation-Title'  : project.mod_name,
+            'Implementation-Vendor' : 'earthcomputer',
+            'Implementation-Version': project.mod_version
+        ])
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.release = 21
+}

@@ -1,0 +1,33 @@
+{
+  "required": true,
+  "package": "net.earthcomputer.enchantpredict.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "minVersion": "0.8.5",
+  "client": [
+    "enchant.EnchantmentScreenMixin",
+    "enchant.MultiPlayerGameModeMixin",
+    "rngevents.ClientLevelMixin",
+    "rngevents.LocalPlayerMixin",
+    "rngevents.MultiPlayerGameModeMixin",
+    "rngevents.ClientPacketListenerMixin"
+  ],
+  "mixins": [
+    "rngevents.AnvilMenuMixin",
+    "rngevents.CrossbowItemMixin",
+    "rngevents.CustomCreativeSlotMixin",
+    "rngevents.EntityMixin",
+    "rngevents.InventoryMixin",
+    "rngevents.LivingEntityMixin",
+    "rngevents.PlayerMixin",
+    "rngevents.droppableinventory.EnchantmentMenuMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  },
+  "mixinextras": {
+    "minVersion": "0.4.1"
+  }
+}
