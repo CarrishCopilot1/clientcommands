@@ -420,8 +420,8 @@ public class EnchantmentCracker {
                     int timesNeeded = finalResult.itemThrows();
                     if (timesNeeded != ManipulateResult.NO_DUMMY) {
                         if (timesNeeded != 0) {
-                            player.snapTo(player.getX(), player.getY(), player.getZ(), player.getYRot(), 90);
-                            player.connection.send(new ServerboundMovePlayerPacket.Rot(player.getYRot(), 90, player.onGround(), player.horizontalCollision));
+                            player.absMoveTo(player.getX(), player.getY(), player.getZ(), player.getYRot(), 90);
+                            player.connection.send(new ServerboundMovePlayerPacket.Rot(player.getYRot(), 90, player.onGround()));
                         }
                         if (timesNeeded > 0) {
                             isCurrentlyThrowingItems = true;

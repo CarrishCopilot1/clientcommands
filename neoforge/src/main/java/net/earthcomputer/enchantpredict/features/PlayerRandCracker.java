@@ -262,7 +262,7 @@ public class PlayerRandCracker {
         if (player == null || interactionManager == null) return new ThrowItemsResult(ThrowItemsResult.Type.THROTTLED);
 
         boolean isInContainer = mc.screen instanceof AbstractContainerScreen && !(mc.screen instanceof CreativeModeInventoryScreen);
-        boolean useCreativeThrow = player.hasInfiniteMaterials() && !isInContainer;
+        boolean useCreativeThrow = player.getAbilities().instabuild && !isInContainer;
         if (useCreativeThrow) {
             ItemStack stackToDrop = new ItemStack(Items.COBBLESTONE);
             player.drop(stackToDrop, true);
