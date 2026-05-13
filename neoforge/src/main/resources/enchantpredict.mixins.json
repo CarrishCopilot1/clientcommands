@@ -1,0 +1,19 @@
+{
+  "required": true,
+  "package": "net.earthcomputer.enchantpredict.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "minVersion": "0.8.5",
+  "client": [
+    "enchant.EnchantmentScreenMixin",
+    "rngevents.ClientPacketListenerMixin",
+    "rngevents.LocalPlayerMixin",
+    "rngevents.MultiPlayerGameModeMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "mixinextras": {
+    "minVersion": "0.4.1"
+  }
+}
+
