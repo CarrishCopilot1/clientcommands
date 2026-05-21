@@ -1,0 +1,39 @@
+name: Check and Release Build
+on:
+  push:
+    branches: ['*']
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: neoforge
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: gradle/actions/wrapper-validation@v4
+        with:
+          gradle-wrapper-directory: neoforge
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '25'
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('neoforge/**/*.gradle*', 'neoforge/**/gradle-wrapper.properties') }}
+      - run: ./gradlew check --stacktrace --no-daemon
+      - run: ./gradlew build -Pmod_version="$(git describe --always --tags | cut -c2-)" --stacktrace --no-daemon
+      - uses: actions/upload-artifact@v4
+        with:
+          name: clientcommands-snapshot
+          path: neoforge/build/libs/
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results
+          path: neoforge/build/reports/
